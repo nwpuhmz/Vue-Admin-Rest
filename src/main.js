@@ -9,6 +9,12 @@ import App from './App'
 import router from './router'
 //导入element组件
 import ElementUI from 'element-ui'
+//导入状态管理器
+import store from '@/store'
+//导入请求框架
+import api from './api'
+//导入mock数据
+import './mock'
 
 //导入样式
 //import 'normalize.css'
@@ -18,9 +24,13 @@ import 'element-ui/lib/theme-default/index.css'
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
+//使用api
+Vue.use(api)
 /* eslint-disable no-new */
 new Vue({
   router,
- ...App
+  store,
+  ...App
+
 }).$mount('mainbody')
 
