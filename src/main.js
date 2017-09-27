@@ -12,9 +12,10 @@ import ElementUI from 'element-ui'
 //导入状态管理器
 import store from '@/store'
 //导入请求框架
-import api from './api'
+import api from '@/api'
 //导入mock数据
-import './mock'
+import Mock from '@/mock'
+//Mock.bootstrap();
 
 //导入样式
 //import 'normalize.css'
@@ -24,7 +25,7 @@ import 'element-ui/lib/theme-default/index.css'
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
-//使用api
+// //使用api
 Vue.use(api)
 /* eslint-disable no-new */
 new Vue({

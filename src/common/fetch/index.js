@@ -31,8 +31,10 @@ export default function fetch(options) {
     })
     //请求处理
     instance(options)
+    //es6 对象的解构赋值es6:{data: {code, msg, data}}
       .then(({data: {code, msg, data}}) => {
         //请求成功时,根据业务判断状态
+        console.log('fetch index.js',data);
         if (code === port_code.success) {
           resolve({code, msg, data})
           return false
@@ -44,6 +46,7 @@ export default function fetch(options) {
         reject({code, msg, data})
       })
       .catch((error) => {
+        console.log('fetch index.js catch.');
         //请求失败时,根据业务判断状态
         if (error.response) {
           let resError = error.response

@@ -35,7 +35,7 @@
    import {mapGetters, mapActions} from 'vuex'
   import {GET_USER_INFO} from '@/store/getters/type'
   import {SET_USER_INFO} from '@/store/actions/type'
-
+ // import { user_api } from '@/api';
   const USER_OUT = 0
   const USER_INFO = 1
   const USER_SETTING = 2
@@ -57,14 +57,14 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$fetch.api_user.logout()
-            .then(({msg}) => {
-              this.$message.success(msg)
+           this.$fetch.api_user.Logout().then( res => {
+              this.$message.success(res.msg)
               this.set_user_info(null)
               setTimeout(this.$router.replace({name: "login"}), 500)
             })
-        }).catch(() => {
-
+        }).catch((err) => {
+          console.log(err);
+            //this.$message.error()
         })
       },
       user_info() {

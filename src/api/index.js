@@ -1,4 +1,3 @@
-
 import * as api_user from './user'
 
 const apiObj = {

@@ -25,7 +25,7 @@
 </template>
 <script type="text/javascript">
   import {mapActions} from 'vuex'
-  import {port_user, port_code} from '@/common/port_uri'
+  // import { user_api } from '@/api';
   import {SET_USER_INFO} from '@/store/actions/type'
 
   export default{
@@ -52,25 +52,25 @@
         this.$refs.form.validate((valid) => {
           if (!valid) return false
           this.load_data = true
-          //登录提交
-          this.$fetch.api_user.login(this.form)
-            .then(({data, msg}) => {
-              this.set_user_info({
+         //  console.log(this.form);
+             this.$fetch.api_user.Login(this.form).then(({data, msg}) => {
+              
+              this.logining = false;
+              //NProgress.done();
+             // let { msg, code, user } = data;
+
+                this.set_user_info({
                 user: data,
                 login: true
               })
-              this.$message.success(msg)
-              setTimeout(this.$router.push({path: '/'}), 500)
-            })
-            .catch(({code}) => {
-              this.load_data = false
-              if (code === port_code.error) {
-                this.$notify.info({
-                  title: '温馨提示',
-                  message: '账号和密码都为：admin'
-                })
-              }
-            })
+               this.$message.success(msg)
+               setTimeout(this.$router.push({path: '/'}), 500)
+              
+            }).catch(({code,msg})=>{
+               console.log('login.vue error');
+              this.load_data = false;
+              this.$message.error(msg);
+            });
         })
       }
     }
