@@ -2,7 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import viewPageComponent from '@/pages/App'
 import homeComponent from '@/pages/home'
+import saveItemComponent from "@/pages/home/addItem"
 import loginComponent from '@/pages/user/login'
+import barChartsComponent from '@/pages/tongji/Charts'
 import store from '@/store'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -11,7 +13,7 @@ Vue.use(VueRouter)
 
 const routes =  [
    {
-      path: '/user/login',
+      path: '/login',
       name: 'login',
       component: loginComponent
     },
@@ -27,10 +29,47 @@ const routes =  [
             title: "主页",
             auth: true
           }
-        }
+        },
+        {
+          path: '/item/update/:id',
+          name: 'itemUpdate',
+          component: saveItemComponent,
+          meta: {
+            title: "数据修改",
+            auth: true
+          }
+        },
+         {
+          path: '/item/add',
+          name: 'itemAdd',
+          component: saveItemComponent,
+          meta: {
+            title: "添加数据",
+            auth: true
+              }
+          },
+           {
+            path: '/tongji/charts',
+            name: 'tongji',
+            component: barChartsComponent,
+            meta: {
+              title: "图表统计",
+              auth: true
+            }
+          }
+    
       ]
 
     }
+   //   {
+    //   path: '/table/base',
+    //   name: 'tableBase',
+    //   component: baseTableComponent,
+    //   meta: {
+    //     title: "基本表格",
+    //     auth: true
+    //   }
+    // }
   ]
 
 const router = new VueRouter({
@@ -51,14 +90,14 @@ router.beforeEach((to, from, next) => {
   NProgress.done().start()
   let toName = to.name
   // let fromName = from.name
-  let is_login = store.state.user_info.login
+  let token = store.state.token_info.token
 
-  if (!is_login && toName !== 'login') {
+  if (!token && toName !== 'login') {
     next({
       name: 'login'
     })
   } else {
-    if (is_login && toName === 'login') {
+    if (token && toName === 'login') {
       next({
         path: '/'
       })

@@ -1,10 +1,11 @@
 <template>
+
   <div class="menu-right">
     <div class="notification-menu">
       <el-dropdown trigger="click" class="notification-list">
         <div class="notification-btn">
-          <img :src="get_user_info.user.avatar" :alt="get_user_info.user.name"/>
-          <span v-text="get_user_info.user.name"></span>
+          <img src="./images/avator.png"/>
+          <span v-text="get_user_info.user.username"></span>
           <span class="icon"></span>
         </div>
         <el-dropdown-menu slot="dropdown" class="dropdown-menu">
@@ -34,13 +35,18 @@
 <script type="text/javascript">
    import {mapGetters, mapActions} from 'vuex'
   import {GET_USER_INFO} from '@/store/getters/type'
-  import {SET_USER_INFO} from '@/store/actions/type'
+  import {SET_USER_INFO,SET_TOKEN} from '@/store/actions/type'
  // import { user_api } from '@/api';
   const USER_OUT = 0
   const USER_INFO = 1
   const USER_SETTING = 2
 
   export default{
+    data(){
+      return {
+        avator:"./images/logo.png"
+      }
+    },
     computed: {
       ...mapGetters({
         get_user_info: GET_USER_INFO
@@ -48,7 +54,8 @@
     },
     methods: {
       ...mapActions({
-        set_user_info: SET_USER_INFO
+        set_user_info: SET_USER_INFO,
+        set_token: SET_TOKEN
       }),
       //退出
       user_out(){
@@ -58,8 +65,9 @@
           type: 'warning'
         }).then(() => {
            this.$fetch.api_user.Logout().then( res => {
-              this.$message.success(res.msg)
+              this.$message.success("注销成功")
               this.set_user_info(null)
+              this.set_token(null)
               setTimeout(this.$router.replace({name: "login"}), 500)
             })
         }).catch((err) => {

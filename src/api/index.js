@@ -1,7 +1,8 @@
 import * as api_user from './user'
-
+import * as api_item from './item'
 const apiObj = {
-  api_user
+  api_user,
+  api_item
 }
 
 const install = function (Vue) {

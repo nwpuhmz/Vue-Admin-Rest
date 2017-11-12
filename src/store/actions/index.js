@@ -7,5 +7,10 @@ export default {
   //设置用户信息和登录
   [actions.SET_USER_INFO]({commit}, userinfo){
     commit(mutations.SET_USER_INFO, userinfo)
+  },
+    
+  [actions.SET_TOKEN]({commit}, token){
+    commit(mutations.SET_TOKEN, token)
   }
+  
 }

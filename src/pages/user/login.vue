@@ -26,7 +26,7 @@
 <script type="text/javascript">
   import {mapActions} from 'vuex'
   // import { user_api } from '@/api';
-  import {SET_USER_INFO} from '@/store/actions/type'
+  import {SET_TOKEN,SET_USER_INFO} from '@/store/actions/type'
 
   export default{
     data(){
@@ -45,7 +45,8 @@
     },
     methods: {
       ...mapActions({
-        set_user_info: SET_USER_INFO
+        set_token: SET_TOKEN,
+        set_user_info:SET_USER_INFO
       }),
       //提交
       submit_form() {
@@ -53,23 +54,33 @@
           if (!valid) return false
           this.load_data = true
          //  console.log(this.form);
-             this.$fetch.api_user.Login(this.form).then(({data, msg}) => {
-              
+         let login_para = this.form
+         login_para.grant_type = "password";
+             this.$fetch.api_user.Login(login_para).then((res) => {
+              console.log("login resolved");
               this.logining = false;
               //NProgress.done();
              // let { msg, code, user } = data;
 
-                this.set_user_info({
-                user: data,
-                login: true
+                this.set_token({
+                token: res.access_token
               })
-               this.$message.success(msg)
+               this.$message.success("登录成功")
+               //拉取User信息
+                this.$fetch.api_user.GetUserInfo().then(res=>{
+                    this.set_user_info({
+                      user:res
+                    })
+                }
+                );
                setTimeout(this.$router.push({path: '/'}), 500)
               
-            }).catch(({code,msg})=>{
+            }).catch((error)=>{
                console.log('login.vue error');
               this.load_data = false;
-              this.$message.error(msg);
+              let errorData = error.response;
+              this.$message.error("登录失败");              
+              //this.$message.error(errorData.data.error_description);
             });
         })
       }

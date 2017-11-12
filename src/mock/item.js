@@ -163,37 +163,141 @@
 
 //   }
 // };
-import { LoginUsers, Users } from './data/user';
 import {port_code} from '@/common/port_uri'
-export default {
-  login: config => {
-   
-    let {username, password} = JSON.parse(config.data);
- 
-        return new Promise((resolve, reject) => {
-          let user = null;
-          setTimeout(() => {
-            let hasUser = LoginUsers.some(u => {
-              if (u.username === username && u.password === password) {
-                user = JSON.parse(JSON.stringify(u));
-                user.password = undefined;
-                return true;
-              }
-            });
+import {Items} from'./data/item'
 
-            if (hasUser) {
-              console.log('mock user.js resolve',user);
-              resolve([200, { code: port_code.success, msg: '登录成功', data:user }]);
-            } else {    
-              console.log('mock user.js reject',user);               
-              resolve([200, { code: port_code.username_or_password_error, msg: '账号或密码错误' }]);
-            }
-          }, 1000);
-        });
-  },
-  logout: () => new Promise(resolve => {
+let _Items = Items;
+
+export default {
+  list: () => new Promise(resolve => {
     setTimeout(() => {
-      resolve([200, {code:port_code.success,msg:'注销成功'}]);
+      resolve([200, {code:port_code.success,msg:'get item list success',data:{
+      result: _Items,
+      page: 1,
+      'total': 100
+      }}]);
     }, 1000);
-  })
+  }),
+  
+  listWithPage : config => {
+      let {page, length} = config.params;
+      // let mockUsers = _Users.filter(user => {
+      //   if (name && user.name.indexOf(name) == -1) return false;
+      //   return true;
+      // });
+      let total = _Items.length;
+      let mockItems = _Items;
+      mockItems = mockItems.filter((u, index) => index < length * page && index >= length * (page - 1));
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {code:port_code.success,msg:'get item list success',data:{
+                result: mockItems,
+                page: page,
+                total: total
+      }}]);
+        }, 1000);
+      });
+  },
+
+  del: config => {
+    let { id } = config.params;
+    _Items = _Items.filter(item => item.id !== id);
+   return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: port_code.success,
+            msg: '删除成功'
+          }]);
+        }, 500);
+      })
+  },
+
+  batch_del:config => {
+    let { ids } = config.params;
+      ids = ids.split(',');
+      _Items = _Items.filter(u => !ids.includes(u.id.toString()));
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: port_code.success,
+            msg: '批量删除成功'
+          }]);
+        }, 500);
+      })
+  },
+
+/*
+          flight: '',
+          flightFx_Hx_DM: '',
+          flight_count:'',
+          flightDate: '',
+          start_end_time: '',
+          ssd_number:'',
+          file_number:'',
+          dataType: [],
+          item_desc:''
+*/
+  save:config => {
+   
+      let {
+          flight,
+          flightFx_Hx_DM,
+          flight_count,
+          flightDate,
+          start_end_time,
+          ssd_number,
+          file_number,
+          dataType,
+          item_desc
+        } = config.params;
+           console.log("mock/item.js/save",flight,
+          flightFx_Hx_DM,
+          flight_count,
+          flightDate,
+          start_end_time,
+          ssd_number,
+          file_number,
+          dataType,
+          item_desc);
+      let new_id = _Items.length+1;
+      _Items.push({
+        id: new_id,
+        username:'admin',
+        createTime:'2017-10-31',
+        status:0,
+        flight_count:10,
+        flight:flight,
+        flightFx_Hx_DM:flightFx_Hx_DM,
+        flightDate:flightDate,
+        start_end_time:start_end_time,
+        ssd_number:ssd_number,
+          file_number:file_number,
+          dataType:dataType,
+          item_desc:item_desc
+      });
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: port_code.success,
+            msg: '新增成功'
+          }]);
+        }, 500);
+      });
+    },
+
+  get:config => {
+    let { id } = config.params;
+    let mockItem = _Items;
+    mockItem = mockItem.filter(item => item.id === id);
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: port_code.success,
+            msg: '查找成功',
+            data:mockItem[0]
+          }]);
+        }, 500);
+      });
+    }
+  
 };

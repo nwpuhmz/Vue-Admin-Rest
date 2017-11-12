@@ -11,22 +11,30 @@ import router from './router'
 import ElementUI from 'element-ui'
 //导入状态管理器
 import store from '@/store'
+//导入mock数据
+//import Mock from '@/mock'
 //导入请求框架
 import api from '@/api'
-//导入mock数据
-import Mock from '@/mock'
-//Mock.bootstrap();
 
+//Mock.bootstrap();
+//全局filter
+import * as filters from '@/common/filters'
 //导入样式
 //import 'normalize.css'
 import 'font-awesome/css/font-awesome.min.css'
 import 'element-ui/lib/theme-default/index.css'
+
+// register global utility filters.
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
 
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
 // //使用api
 Vue.use(api)
+
 /* eslint-disable no-new */
 new Vue({
   router,

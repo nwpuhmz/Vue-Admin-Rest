@@ -19,18 +19,38 @@
 // export const addUser = params => { return axios.get(`${base}/user/add`, { params: params }); };
 import fetch from '@/common/fetch'
 import {port_user} from '@/common/port_uri'
+import store from '@/store'
 
 export function Login(data) {
   return fetch({
     url: port_user.login,
     method: 'post',
-    data
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'authorization':'Basic Y2xpZW50OnNlY3VyaXR5'
+      },
+    params:data
+  });
+}
+
+export function GetUserInfo() {
+  let token = 'Bearer '+ store.state.token_info.token
+  return fetch({
+    url: port_user.getUserinfo,
+      headers: {
+        'Authorization':token
+      },
+    method: 'get'
   });
 }
 
 export function Logout() {
+  let token = 'Bearer '+ store.state.token_info.token
   return fetch({
     url: port_user.logout,
-    method: 'post'
+      headers: {
+        'Authorization':token
+      },
+    method: 'get'
   });
 }

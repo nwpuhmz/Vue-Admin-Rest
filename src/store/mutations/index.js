@@ -11,5 +11,16 @@ export default {
     } else {
       cookieStorage.set('user_info', userinfo)
     }
-  }
+  },
+
+    [type.SET_TOKEN](state, token){
+    state.token_info = token || {}
+    if (token === null) {
+      cookieStorage.remove('token_info')
+    } else {
+      cookieStorage.set('token_info', token)
+    }
+  },
+
+  
 }
