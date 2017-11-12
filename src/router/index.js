@@ -31,7 +31,7 @@ const routes =  [
           }
         },
         {
-          path: '/item/update/:id',
+          path: '/item/view/:id',
           name: 'itemUpdate',
           component: saveItemComponent,
           meta: {

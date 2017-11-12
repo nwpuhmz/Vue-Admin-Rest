@@ -37,7 +37,7 @@ export function del(params) {
     params
   })
 }
-//添加或修改数据
+//添加数据
 export function save(data) {
   return fetch({
     url: port_item.save,
@@ -45,12 +45,20 @@ export function save(data) {
     data
   })
 }
+//修改数据
+export function update(data) {
+  return fetch({
+    url: port_item.update,
+    method: 'put',
+    data
+  })
+}
 //批量删除
-export function batch_del(params) {
+export function batch_del(data) {
   return fetch({
     url: port_item.batch_del,
-    method: 'post',
-    params
+    method: 'delete',
+    data
   })
 }
 

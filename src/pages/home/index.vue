@@ -5,7 +5,7 @@
         <i class="fa fa-refresh"></i>
       </el-button>
       <router-link :to="{name: 'itemAdd'}" tag="span">
-        <el-button type="primary" icon="plus" size="small">添加数据</el-button>
+        <el-button type="primary" icon="plus" size="small">新增卸载记录</el-button>
       </router-link>
     </panel-title>
     <div class="panel-body">
@@ -64,7 +64,7 @@
           width="180">
           <template scope="props">
             <router-link :to="{name: 'itemUpdate', params: {id: props.row.id}}" tag="span">
-              <el-button type="info" size="small" icon="edit">修改</el-button>
+              <el-button type="info" size="small" icon="view">查看</el-button>
             </router-link>
             <el-button type="danger" size="small" icon="delete" @click="delete_data(props.row)">删除</el-button>
           </template>
@@ -84,7 +84,7 @@
           <el-pagination
             @current-change="handleCurrentChange"
             :current-page="currentPage"
-            :page-size="20"
+            :page-size="count"
             layout="total, prev, pager, next"
             :total="total">
           </el-pagination>
@@ -129,13 +129,13 @@ import {panelTitle, bottomToolBar} from '@/components'
       get_table_data(){ 
         this.load_data = true
         this.$fetch.api_item.listWithPage({
-          page: this.page,
+          page: this.currentPage,
           count: this.count
         })
           .then( res => {
             this.table_data = res.data
             this.currentPage = res.currentPage
-            this.total = res.totalPage
+            this.total = res.totalCount
             this.load_data = false
           })
           .catch((err) => {
@@ -154,9 +154,9 @@ import {panelTitle, bottomToolBar} from '@/components'
             this.load_data = true
             let para = { id: item.id };
             this.$fetch.api_item.del(para)
-              .then(({msg}) => {
+              .then( res => {
                 this.get_table_data()
-                this.$message.success(msg)
+                this.$message.success("删除成功")
               })
               .catch(() => {
                 this.load_data = false;                              
@@ -184,12 +184,12 @@ import {panelTitle, bottomToolBar} from '@/components'
         })
           .then(() => {
             this.load_data = true
-            let ids = this.batch_select.map(item => item.id).toString();
+            let ids = this.batch_select.map(item => item.id);
             let para = { ids: ids };
-            this.$fetch.api_item.batch_del(para)
-              .then(({msg}) => {
+            this.$fetch.api_item.batch_del(ids)
+              .then(res => {
                 this.load_data = false;                
-                this.$message.success(msg)
+                this.$message.success("批量删除成功")
                 this.get_table_data()
               })
               .catch(() => {

@@ -1,6 +1,8 @@
 <template>
   <div class="panel">
-    <panel-title :title="$route.meta.title"></panel-title>
+    <panel-title :title="$route.meta.title">
+       
+    </panel-title>
     <div class="panel-body"
          v-loading="load_data"
          element-loading-text="拼命加载中">
@@ -8,7 +10,7 @@
         <el-col :span="8">
            <el-form :inline="false" ref="form" :model="form" :rules="rules" label-width="100px">
             <el-form-item label="飞机号:" prop="flight">
-              <el-select v-model="form.flight" placeholder="选择飞机号" >
+              <el-select v-model="form.flight" placeholder="选择飞机号" :disabled="isView">
                <el-option-group
                   v-for="group in flight_options"
                   :key="group.label"
@@ -23,7 +25,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="类型:" prop="flightFx_Hx_DM">
-               <el-select v-model="form.flightFx_Hx_DM" filterable placeholder="选择飞行类型" >
+               <el-select v-model="form.flightFx_Hx_DM" filterable placeholder="选择飞行类型" :disabled="isView">
                     <el-option
                       v-for="item in flightFx_Hx_DM_options"
                       :key="item.value"
@@ -33,7 +35,7 @@
                </el-select>
             </el-form-item>
             <el-form-item label="飞行架次:" prop="flight_count" style="width: 80%;">
-              <el-input v-model="form.flight_count" number></el-input>
+              <el-input v-model.number="form.flight_count" :disabled="isView"></el-input>
             </el-form-item>
             <el-form-item label="飞行日期:" prop="flightDate">
               <el-date-picker
@@ -42,18 +44,20 @@
                 format="yyyy-MM-dd"
                 :editable="false"    
                  @change="on_change_flightDate"     
-                placeholder="2017-01-01">
+                placeholder="2017-01-01"
+                :disabled="isView">
               </el-date-picker>
             </el-form-item>
             <el-form-item label="起止时间:" prop="start_end_time">
                <el-time-picker
                   is-range
                   v-model="form.start_end_time"
-                  placeholder="选择时间范围">
+                  placeholder="选择时间范围"
+                  :disabled="isView">
                 </el-time-picker>
             </el-form-item>
             <el-form-item label="盘号:" prop="ssd_number">
-               <el-select v-model="form.ssd_number" filterable placeholder="选择盘号" >
+               <el-select v-model="form.ssd_number" filterable placeholder="选择盘号" :disabled="isView">
                     <el-option
                       v-for="item in ssd_number_options"
                       :key="item.value"
@@ -63,7 +67,7 @@
                </el-select>
             </el-form-item>
             <el-form-item label="文件号:" prop="file_number">
-               <el-select v-model="form.file_number" filterable placeholder="选择文件号" >
+               <el-select v-model="form.file_number" filterable placeholder="选择文件号" :disabled="isView">
                     <el-option
                       v-for="item in file_number_options"
                       :key="item.value"
@@ -73,7 +77,7 @@
                </el-select>
             </el-form-item>
             <el-form-item label="数据类型:" prop="dataType">
-               <el-select v-model="form.dataType" multiple placeholder="数据类型">
+               <el-select v-model="form.dataType" multiple placeholder="数据类型" :disabled="isView">
                   <el-option
                     v-for="item in dataType_options"
                     :key="item.value"
@@ -83,10 +87,12 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="备注" prop="item_desc">
-              <el-input type="textarea" v-model="form.item_desc"></el-input>
+              <el-input type="textarea" v-model="form.item_desc" :disabled="isView"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="on_submit_form" :loading="on_submit_loading">立即提交</el-button>
+              <el-button type="primary" @click="on_submit_form" :loading="on_submit_loading" :disabled="isView">立即提交</el-button>
+              <el-button type="danger" @click="on_reset_form" :disabled="isView">重置</el-button> 
+              <el-button type="primary" @click="on_edit_form" :disabled="!isView">编辑</el-button>             
               <el-button @click="$router.back()">取消</el-button>
             </el-form-item>
 
@@ -114,6 +120,7 @@ import {panelTitle, bottomToolBar} from '@/components'
           dataType: [],
           item_desc:''
         },
+        isView:true,
         route_id: this.$route.params.id,
         rules: {
           flight: [{required: true, message: '型号不能为空', trigger: 'change'}],
@@ -203,7 +210,12 @@ import {panelTitle, bottomToolBar} from '@/components'
       }
     },
     created(){
-      this.route_id && this.get_form_data()
+     // this.route_id && this.get_form_data()
+      if(this.route_id)
+        this.get_form_data()
+       else{
+         this.isView = false;
+        }
     },
     methods: {
       //获取数据
@@ -236,16 +248,37 @@ import {panelTitle, bottomToolBar} from '@/components'
           this.on_submit_loading = true
           let post_form = this.form
           post_form.start_end_time = JSON.stringify(this.form.start_end_time)
-          post_form.dataType = JSON.stringify(this.form.dataType)          
-          this.$fetch.api_item.save(post_form)
-            .then((res) => {
-              this.$message.success("操作成功")
-              setTimeout(this.$router.back(), 500)
-            })
-            .catch(() => {
-              this.on_submit_loading = false
-            })
+          post_form.dataType = JSON.stringify(this.form.dataType)     
+
+          if(this.route_id)
+          {
+            this.$fetch.api_item.update(post_form)
+                    .then((res) => {
+                      this.$message.success("操作成功")
+                      setTimeout(this.$router.back(), 500)
+                    })
+                    .catch(() => {
+                      this.on_submit_loading = false
+                    })
+          }else{
+            this.$fetch.api_item.save(post_form)
+                    .then((res) => {
+                      this.$message.success("操作成功")
+                      setTimeout(this.$router.back(), 500)
+                    })
+                    .catch(() => {
+                      this.on_submit_loading = false
+                    })
+          }   
         })
+      },
+           //提交
+      on_reset_form(){
+       this.$refs.form.resetFields();
+      },
+      //编辑
+      on_edit_form(){
+        this.isView = false;
       }
     },
     components: {
