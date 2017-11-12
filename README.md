@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # my-vue-admin
 
 > A Vue.js project
@@ -28,3 +29,7 @@ npm test
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+=======
+# Vue-Admin-Rest
+Vue2+axios+vuex2+element-ui
+>>>>>>> 26e72a31ac5a2fbb75f9be627ff8f0a21e5083f9
