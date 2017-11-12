@@ -84,6 +84,7 @@ const routes =  [
   ]
 
 const router = new VueRouter({
+  base: '/cms-xz/',
   routes,
   mode: 'hash', //default: hash ,history
   // scrollBehavior (to, from, savedPosition) {
