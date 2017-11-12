@@ -5,6 +5,8 @@ import homeComponent from '@/pages/home'
 import saveItemComponent from "@/pages/home/addItem"
 import loginComponent from '@/pages/user/login'
 import barChartsComponent from '@/pages/tongji/Charts'
+//404
+import noPageComponent from '@/pages/error/404'
 import store from '@/store'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -12,6 +14,15 @@ import 'nprogress/nprogress.css'
 Vue.use(VueRouter)
 
 const routes =  [
+    {
+      path: '/404',
+      name: 'notPage',
+      component: noPageComponent
+    }, 
+    {
+      path: '*',
+      redirect: '/404'
+    },
    {
       path: '/login',
       name: 'login',

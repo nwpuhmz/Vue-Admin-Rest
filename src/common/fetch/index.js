@@ -5,12 +5,16 @@ import {port_code} from '@/common/port_uri'
 import router from '@/router'
 import {Message} from 'element-ui'
 import store from '@/store'
-import {SET_USER_INFO} from '@/store/actions/type'
+import {SET_USER_INFO,SET_TOKEN} from '@/store/actions/type'
 import {server_base_url} from '@/common/config'
 
 //设置用户信息action
 const setUserInfo = function (user) {
   store.dispatch(SET_USER_INFO, user)
+}
+//设置Token
+const setTokenInfo = function (token) {
+  store.dispatch(SET_TOKEN, token)
 }
 
 export default function fetch(options) {
@@ -64,6 +68,15 @@ export default function fetch(options) {
           // let resCode = resError.status
           // let resMsg = resError.data.error
          // Message.error('操作失败！错误原因 ' + resMsg)
+          if(error.response)
+          {
+            switch(error.response.status){
+              case 401:
+                setUserInfo(null)
+                setTokenInfo(null)
+                router.replace({name: "login"})
+            }
+          }
           reject(error.response)
         //}
       })

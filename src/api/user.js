@@ -37,9 +37,9 @@ export function GetUserInfo() {
   let token = 'Bearer '+ store.state.token_info.token
   return fetch({
     url: port_user.getUserinfo,
-      headers: {
-        'Authorization':token
-      },
+      // headers: {
+      //   'Authorization':token
+      // },
     method: 'get'
   });
 }
@@ -48,9 +48,9 @@ export function Logout() {
   let token = 'Bearer '+ store.state.token_info.token
   return fetch({
     url: port_user.logout,
-      headers: {
-        'Authorization':token
-      },
+      // headers: {
+      //   'Authorization':token
+      // },
     method: 'get'
   });
 }
