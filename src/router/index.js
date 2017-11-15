@@ -3,6 +3,9 @@ import VueRouter from 'vue-router'
 import viewPageComponent from '@/pages/App'
 import homeComponent from '@/pages/home'
 import saveItemComponent from "@/pages/home/addItem"
+import userManageComponent from "@/pages/user/user_manage"
+import saveUserComponent from "@/pages/user/addUser"
+
 import loginComponent from '@/pages/user/login'
 import barChartsComponent from '@/pages/tongji/Charts'
 //404
@@ -41,6 +44,33 @@ const routes =  [
             auth: true
           }
         },
+         {
+            path: '/user',
+            name: 'user',
+            component: userManageComponent,
+            meta: {
+              title: "用户管理",
+              auth: true
+            }
+          },
+             {
+            path: '/user/view/:id',
+            name: 'userUpdate',
+            component: saveUserComponent,
+            meta: {
+              title: "用户详情",
+              auth: true
+            }
+          },
+             {
+            path: '/user/add',
+            name: 'userAdd',
+            component: saveUserComponent,
+            meta: {
+              title: "添加用户",
+              auth: true
+            }
+          },
         {
           path: '/item/view/:id',
           name: 'itemUpdate',
@@ -101,22 +131,38 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   NProgress.done().start()
   let toName = to.name
+  let isAuth = to.meta.auth
   // let fromName = from.name
   let token = store.state.token_info.token
-
-  if (!token && toName !== 'login') {
-    next({
-      name: 'login'
-    })
-  } else {
-    if (token && toName === 'login') {
+  let user = store.state.user_info.user
+  if(isAuth && !token){
+     next({
+       name: 'login'
+     })
+  }else{
+    if(token && toName === 'user' && user.roles.indexOf('ROLE_admin')<0){
+      
       next({
-        path: '/'
+        name:'home'
       })
-    } else {
+    }else{
       next()
     }
+    
   }
+  // if (!token && toName !== 'login') {
+  //   next({
+  //     name: 'login'
+  //   })
+  // } else {
+  //   if (token && toName === 'login') {
+  //     next({
+  //       path: '/'
+  //     })
+  //   } else {
+  //     next()
+  //   }
+  // }
 })
 
 //路由完成之后的操作
