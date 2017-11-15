@@ -44,6 +44,15 @@ export function GetUserInfo() {
   });
 }
 
+//根据id查询数据
+export function get(params) {
+  return fetch({
+    url: port_user.get,
+    method: 'get',
+    params
+  })
+}
+
 export function Logout() {
   let token = 'Bearer '+ store.state.token_info.token
   return fetch({
@@ -53,4 +62,46 @@ export function Logout() {
       // },
     method: 'get'
   });
+}
+
+//数据列表带分页
+export function listWithPage(params) {
+  return fetch({
+    url: port_user.listWithPage,
+    method: 'get',
+    params
+  })
+}
+
+//根据id删除数据
+export function del(params) {
+  return fetch({
+    url: port_user.del,
+    method: 'delete',
+    params
+  })
+}
+//添加数据
+export function save(data) {
+  return fetch({
+    url: port_user.save,
+    method: 'post',
+    data
+  })
+}
+//修改数据
+export function update(data) {
+  return fetch({
+    url: port_user.update,
+    method: 'put',
+    data
+  })
+}
+//批量删除
+export function batch_del(data) {
+  return fetch({
+    url: port_user.batch_del,
+    method: 'delete',
+    data
+  })
 }

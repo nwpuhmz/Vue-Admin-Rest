@@ -48,11 +48,16 @@
     data(){
       return {
         isCollapse:false,
-        nav_menu_data: [{
+        nav_menu_data: [
+        {
           title: "主页",
           path: "/home",
           icon: "fa-home"
         }, {
+          title: "用户管理",
+          path: "/user",
+          icon: "fa-user"
+        },{
           title: "统计",
           path: "/tongji",
           icon: "fa-bar-chart-o",
@@ -60,6 +65,7 @@
             title: "图表统计",
             path: "/tongji/charts"
           }]
+          
         }]
       }
     },

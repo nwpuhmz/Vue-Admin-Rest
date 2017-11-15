@@ -1,7 +1,7 @@
 
 
 //数据列表带分页
-export const listWithPage = "api/v1/items/"
+export const listWithPage = "api/v1/items"
 //根据id查询数据
 export const get = "api/v1/items/detail"
 //根据id删除数据
